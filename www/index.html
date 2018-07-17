@@ -3,8 +3,10 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
-    <title></title>
+    <!-- If you’re using Cordova 4+, you will need to check if there’s a Whitelist plugin installed with your project. -->
+    <meta http-equiv="Content-Security-Policy" content="default-src *; script-src 'self' 'unsafe-inline' 'unsafe-eval' *; style-src  'self' 'unsafe-inline' *">
 
+    <title></title>
     <link rel="manifest" href="manifest.json">
 
     <!-- un-comment this code to enable service worker
@@ -27,7 +29,10 @@
     <script src="lib/ionic/js/ionic.bundle.js"></script>
 
     <!-- cordova script (this will be a 404 during development) -->
-    <script src="cordova.js"></script>
+    <script src="lib/ngstorage/ngStorage.min.js"></script>
+    <script src="lib/ngCordova/dist/ng-cordova.js"></script>
+    <script src="lib/ionic-datepicker/dist/ionic-datepicker.bundle.min.js"></script>
+    <!-- <script src="cordova.js"></script> -->
 
     <!-- your app's js -->
     <script src="js/app.js"></script>

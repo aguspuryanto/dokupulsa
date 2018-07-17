@@ -1,0 +1,12 @@
+<ion-view view-title="History">
+  <ion-content>
+    <ion-refresher on-refresh="doRefresh()"></ion-refresher>
+    <ion-list>
+      <ion-item ng-repeat="h in history.data">
+        <b>{{h.produk}}</b>
+        <p ng-show="h.target">{{h.target}} <span class="item-note" ng-show="h.target!=0">{{h.total | currency:"Rp. ":0}}</span></p>
+        <p ng-show="h.status==1" text-wrap>{{h.type}} <span class="item-note">{{h.created_at | date:'MM/dd/yyyy'}}</span></p>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>

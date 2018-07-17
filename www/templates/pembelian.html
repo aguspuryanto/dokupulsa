@@ -1,0 +1,46 @@
+<ion-view view-title="Pembelian">
+  <ion-content class="padding">
+    <!-- <h4>Pembelian</h4> -->
+	<div class="list card" style="margin-top:0px;">
+		<div class="item item-avatar">
+			<img src="img/train_64.png">
+			<h2>{{detailTrx[0].product_name}}</h2>
+			<p>{{detailTrx[0].price | currency:"Rp. ":0}}</p>
+		</div>
+		<div ng-show="detailTrx[0].ket" class="item item-divider">{{detailTrx[0].ket}}</div>
+	</div>
+	
+	<h4>Saldo</h4>
+	<div class="list card">
+		<div class="item item-avatar">
+			<img src="img/money_64.png">
+			<p style="font-size:24px"> {{saldo | currency:"Rp. ":0}}</p>
+			<button class="button button-small button-block button-positive" ui-sref="app.bayar({id:0,product_id:product_id,target:target})">Bayar via Saldo</button>
+		</div>
+	</div>
+	
+	<h4>Bank Transfer</h4>
+	<ul class="list">
+		<li>
+			<a class="item item-bank" href="#/app/bayar/1/{{product_id}}/{{target}}">
+				<img src="img/bank-bca.png"> Bank BCA
+			</a>
+		</li>
+		<li>
+			<a class="item item-bank" href="#/app/bayar/2/{{product_id}}/{{target}}">
+				<img src="img/bank-mandiri.png"> Bank Mandiri
+			</a>
+		</li>
+		<li>
+			<a class="item item-bank" href="#/app/bayar/3/{{product_id}}/{{target}}">
+				<img src="img/bank-bri.png"> Bank BRI
+			</a>
+		</li>
+		<li>
+			<a class="item item-bank" href="#/app/bayar/4/{{product_id}}/{{target}}">
+				<img src="img/bank-bni.png"> Bank BNI
+			</a>
+		</li>
+	</ul>
+  </ion-content>
+</ion-view>

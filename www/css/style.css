@@ -1,1 +1,29 @@
 /* Empty. Add your own CSS if you like */
+.row {
+	padding-left: 0px;
+	padding-right: 0px; 
+}
+
+.col {
+    padding: 5px;
+    width: 100%;
+    border: 1px solid #ddd;
+    border-right: none;
+    /*border-radius: 2px;*/
+    /*background: #f7f7f7;*/
+    text-align: center;
+}
+
+.col:last-child {
+	border-right: 1px solid #ddd;
+}
+
+.noborder-top >.col {
+	border-top: none;
+}
+
+a.item-bank img {
+	width:50px !important;
+	padding-right: 5px;
+	/* height:50px !important; */
+}

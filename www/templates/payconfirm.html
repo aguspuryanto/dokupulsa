@@ -1,0 +1,39 @@
+<ion-view view-title="Konfirmasi">
+  <ion-content class="padding">
+  
+	<div class="list card" style="margin-top:0px;">
+		<div class="item item-avatar">
+			<img src="img/train_64.png">
+			<h2><b>{{detailTrx[0].price | currency:"Rp. ":0}}</b></h2>
+			<p>{{detailTrx[0].product_name}} <br> {{target}}</p>
+		</div>
+		<div ng-show="!detailTrx[0].ket" class="item item-divider">{{detailTrx[0].ket}}</div>
+	</div>
+    
+	<h4>Pembayaran via {{namaBank}}</h4>
+	<div class="card">
+	  <div ng-show="pay_id==1">
+		<div class="padding">
+			<h4>BCA KCU Rungkut</h4>
+			<p>NoRek : 8220532560<br>a/n : Agus Puryanto</p>
+		</div>
+		<ul class="list">
+			<li class="item">Harga Produk <span style="float:right;">{{detailTrx[0].price | currency:"Rp. ":0}}</span></li>
+			<li class="item">Kode Unik <span style="float:right;">0</span></li>
+			<li class="item">Jumlah Transfer <span style="float:right;">{{detailTrx[0].price | currency:"Rp. ":0}}</span></li>
+			<li class="item" style="padding-top:0px;padding-bottom:0px;">
+				<button class="button button-block button-balanced" ng-click="bayarPulsa()">Konfirmasi</button>
+			</li>
+		</ul>
+	  </div>
+	  <div ng-show="pay_id==2">Mandiri</div>
+	  <div ng-show="pay_id==3">BRI</div>
+	  <div ng-show="pay_id==4">BNI</div>
+	</div>
+	
+	<!-- <div class="bar bar-footer"> -->
+	  <!-- <button class="button button-large button-block button-balanced">Konfirmasi</button> -->
+	<!-- </div> -->
+
+  </ion-content>
+</ion-view>

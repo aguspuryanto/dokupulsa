@@ -1,0 +1,51 @@
+<ion-view view-title="Pembayaran">
+  <ion-content class="padding">
+    <!-- <h4>Pembayaran</h4> -->
+	<div class="list card" style="margin-top:0px;">
+		<div class="item item-avatar">
+			<img src="avatar.jpg">
+			<h2>{{detailTrx[0].product_name}}</h2>
+			<p>{{detailTrx[0].price | currency:"Rp. ":0}}</p>
+		</div>
+		<div class="item item-divider">{{detailTrx[0].ket}}</div>
+	</div>
+	
+	<h4>Saldo</h4>
+	<ul class="list">
+		<li>
+			<a class="item item-icon-left" href="#">
+				<i class="icon ion-email"></i>
+				<div style="float:right">
+					<button class="button button-small button-block button-positive">Bayar via Saldo</button>
+				</div>
+				<p>Saldo</p>
+				<p>Rp. 100.000</p>
+			</a>
+		</li>
+	</ul>
+	
+	<h4>Bank Transfer</h4>
+	<ul class="list">
+		<li>
+			<a class="item item-icon-left" href="#">
+				<i class="icon ion-email"></i> Bank BCA
+			</a>
+		</li>
+		<li>
+			<a class="item item-icon-left" href="#">
+				<i class="icon ion-email"></i> Bank Mandiri
+			</a>
+		</li>
+		<li>
+			<a class="item item-icon-left" href="#">
+				<i class="icon ion-email"></i> Bank BRI
+			</a>
+		</li>
+		<li>
+			<a class="item item-icon-left" href="#">
+				<i class="icon ion-email"></i> Bank BNI
+			</a>
+		</li>
+	</ul>
+  </ion-content>
+</ion-view>
