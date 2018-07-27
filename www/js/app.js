@@ -22,38 +22,81 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngStorage', 'ngCordo
 		if (window.StatusBar) {
 			// org.apache.cordova.statusbar required
 			StatusBar.styleDefault();
-		}
+    }
+
+    // Check for network connection
+    if(window.Connection) {
+      if(navigator.connection.type == Connection.NONE) {
+        $ionicPopup.confirm({
+          title: 'No Internet Connection',
+          content: 'Sorry, no Internet connectivity detected. Please reconnect and try again.'
+        })
+        .then(function(result) {
+          if(!result) {
+            ionic.Platform.exitApp();
+          }
+        });
+      }
+    }
+    
+    // Disable BACK button on home
+    $ionicPlatform.registerBackButtonAction(function(event) {
+      if (true) { // your check here
+        $ionicPopup.confirm({
+          title: 'System warning',
+          template: 'are you sure you want to exit?'
+        }).then(function(res) {
+          if (res) {
+            ionic.Platform.exitApp();
+          }
+        })
+      }
+    }, 100);
 	
 		$ionicPlatform.registerBackButtonAction(function(e) {
       e.preventDefault();
       function showConfirm() {
-       var confirmPopup = $ionicPopup.show({
-        title : 'Exit AppName?',
-        template : 'Are you sure you want to exit AppName?',
-        buttons : [{
-         text : 'Cancel',
-         type : 'button-royal button-outline',
-        }, {
-         text : 'Ok',
-         type : 'button-royal',
-         onTap : function() {
-          ionic.Platform.exitApp();
-         }
-        }]
-       });
+        var confirmPopup = $ionicPopup.show({
+          title : 'Exit AppName?',
+          template : 'Are you sure you want to exit AppName?',
+          buttons : [{
+            text : 'Cancel',
+            type : 'button-royal button-outline',
+          }, {
+          text : 'Ok',
+          type : 'button-royal',
+          onTap : function() {
+            ionic.Platform.exitApp();
+          }
+          }]
+        });
       };
      
       // Is there a page to go back to?
       if ($ionicHistory.backView()) {
-       // Go back in history
-       $ionicHistory.backView().go();
+        // Go back in history
+        $ionicHistory.backView().go();
       } else {
-       // This is the last page: Show confirmation popup
-       showConfirm();
+        // This is the last page: Show confirmation popup
+        showConfirm();
       }
      
       return false;
-    }, 101);
+    }, 999);
+
+    // To Disable Back in Entire App
+    $ionicPlatform.registerBackButtonAction(function(){
+      event.preventDefault();
+    }, 100);
+
+    // To Conditionally Disable Back
+    $ionicPlatform.registerBackButtonAction(function(){
+      if($ionicHistory.currentStateName === 'app.search'){
+        event.preventDefault();
+      }else{
+        $ionicHistory.goBack();
+      }
+    }, 100);
     
   });
   
@@ -104,7 +147,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngStorage', 'ngCordo
       views: {
         'menuContent': {
           templateUrl: 'templates/plnpra.html',
-          controller: 'PaketdataCtrl'
+          controller: 'PlntokenCtrl'
         }
       }
     })
@@ -128,6 +171,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngStorage', 'ngCordo
         }
       }
     })
+
+    .state('app.token', {
+        url: '/token/:product_id/:target',
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/pembelian.html',
+            controller: 'BeliTokenCtrl'
+          }
+        }
+      })
 
   .state('app.bayar', {
       url: '/bayar/:id/:product_id/:target',

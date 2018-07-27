@@ -1,19 +1,15 @@
-<ion-view view-title="Paket Data">
-  <ion-content class="padding">
+<ion-view view-title="PLN Token">
+  <ion-content class="padding" class="has-header">
     
-	<div class="row">
-	  <div class="col">
-			<input type="number" placeholder="Nomer Handphone" ng-model="noHape" ng-change="cekNomer(noHape)">
-	  </div>
-	  <!-- <div class="col-25">
-		<button class="button button-positive">Proses</button>
-	  </div> -->
-	</div>
+	<h4>ID Pelanggan (56604383242)</h4>
+	<ul class="list">
+		<li class="item" style="padding: 0em 0.6em"><input type="number" placeholder="56604383242" ng-model="idpel"></li>
+	</ul>
 	
-	<h4>{{showOperator}}</h4>
-	<ul ng-show="showOperator" class="list">
+	<h4>Nominal</h4>
+	<ul class="list">
 		<li ng-repeat="item in itemOperator | orderBy:''" >
-			<a class="item" href="#/app/pulsa/pembelian/{{item.product_id}}/{{noHape}}">
+			<a class="item" href="#/app/token/{{item.product_id}}/{{noHape}}">
 				<h3>{{item.product_name}} <span style="float: right;">{{item.price | currency:"Rp. ":0}}</span></h3>
 				<span ng-show="item.ket">{{item.ket}}</span>
 			</a>

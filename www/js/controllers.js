@@ -113,9 +113,9 @@ angular.module('starter.controllers', [])
 	
 	$scope.saldo = 0;
 	$scope.loadSaldo = function(){		
-		/* if($localStorage.Saldo !== undefined) {
+		if($localStorage.Saldo !== undefined) {
 			$scope.saldo = angular.fromJson($localStorage.Saldo);
-		} else { */
+		} else {
 			var url = "http://vaganzatravel.com/pulsa/ceksaldo.php";
 			// var trustedUrl = $sce.trustAsResourceUrl(url);
 			$http.get(url, { cache: true }).then(function(data) {
@@ -128,9 +128,33 @@ angular.module('starter.controllers', [])
 					template: 'Please check your internet!'
 				});
 			});
-		// }
+		}
 	}	
 	$scope.loadSaldo();
+
+	$scope.getFiltered= function(obj, idx){
+		//Set a property on the item being repeated with its actual index
+		//return true only for every 1st item in 3 items
+		return !((obj._index = idx) % 3); 
+	}
+
+	$scope.itemProduk = [];
+	console.log("itemProduk:" + JSON.stringify(angular.fromJson($localStorage.categoriProduk)));
+
+	// if($localStorage.categoriProduk !== undefined) {
+	// 	$scope.itemProduk = angular.fromJson($localStorage.categoriProduk);
+		
+	// } else {
+		$http.get("/categorie.json", { cache: false }).then(function(reply) {
+			// console.info("itemOperator: "+JSON.stringify(reply));
+			$localStorage.categoriProduk = angular.toJson(reply.data.data);
+			$scope.itemProduk = angular.fromJson($localStorage.categoriProduk);
+		});
+	// }
+
+	$scope.getSubArray = function (start, end) {
+		return $scope.itemProduk.slice(start, end);
+	}
 
 })
 
@@ -654,6 +678,93 @@ angular.module('starter.controllers', [])
 	}
 })
 
+.controller('BeliTokenCtrl', function($scope, $stateParams, $http, $sce, $ionicLoading, $ionicPopup, $localStorage, featuresData) {
+	// console.info("product_id: " + $stateParams.product_id);
+	// console.info("target: " + $stateParams.target);
+	
+	$scope.product_id = $stateParams.product_id;
+	$scope.target = "0" + $stateParams.target;
+	$scope.saldo = 0;
+	$scope.loadSaldo = function(){
+		
+		if($localStorage.Saldo !== undefined) {
+			$scope.saldo = angular.fromJson($localStorage.Saldo);
+		} else {
+			var url = "http://vaganzatravel.com/pulsa/ceksaldo.php";
+			// var trustedUrl = $sce.trustAsResourceUrl(url);
+			$http.get(url, { cache: true }).then(function(data) {
+				$localStorage.Saldo = angular.toJson(data.data.balance);
+				$scope.saldo = angular.fromJson($localStorage.Saldo);
+			},function (error) {
+				return alertPopup = $ionicPopup.alert({
+					title: 'Load data failed!',
+					template: 'Please check your internet!'
+				});
+			});
+		}
+	}
+	
+	$scope.loadSaldo();
+	// console.log("localStorage.Saldo:" + angular.fromJson($localStorage.Saldo) );
+
+	$scope.detailTrx = [];
+	// console.log("localStorage.Plntoken:" + angular.fromJson($localStorage.Plntoken) );
+
+	angular.forEach(angular.fromJson($localStorage.Plntoken), function(value, key) {
+		if(value.product_id==$stateParams.product_id){
+			// console.log(value.product_id + " = " + value.product_name);
+			$scope.detailTrx.push({
+				product_id: value.product_id,
+				product_name: value.product_name,
+				ket: value.ket,
+				price: value.price,
+				status: value.status,
+			});
+			// console.info($scope.detailTrx);
+		}
+	});
+
+	$scope.bayarPulsa = function(){
+		console.info($scope.detailTrx);
+		var url = "http://vaganzatravel.com/pulsa/transaksi.php";
+		// var trustedUrl = $sce.trustAsResourceUrl(url);
+		var dataTrx = {
+			code: $scope.detailTrx[0].product_id,
+			target: $scope.target,
+			trxid: Math.floor(Math.random()*(999-100+1)+100)
+		}
+		console.log( dataTrx );
+		// $http.post(url, dataTrx).then(function(resp) {
+		$ionicLoading.show({
+			template: '<ion-spinner></ion-spinner>',
+			duration: 3000
+		}).then(function(){
+			featuresData.GetTransaksi(dataTrx).then(function(resp) {
+				console.log(resp);
+				if(resp.data.status=="error"){
+					return alertPopup = $ionicPopup.alert({
+						title: 'Transaksi Gagal!',
+						template: resp.data.message
+					});
+				}
+				// $localStorage.Saldo = angular.toJson(data.data.balance);
+				// $scope.saldo = angular.fromJson($localStorage.Saldo);
+			},function (error) {
+				return alertPopup = $ionicPopup.alert({
+					title: 'Load data failed!',
+					template: 'Please check your internet!'
+				});
+			});
+			$ionicLoading.hide();
+		},function (error) {
+			return alertPopup = $ionicPopup.alert({
+			// title: 'Login failed!',
+				template: 'ERROR: ' + JSON.stringify(error.status)
+			});
+		});
+	}
+})
+
 .controller('PaymentCtrl', function($scope, $stateParams, $http, $localStorage, $ionicLoading, $ionicPopup, featuresData) {
 	// console.info( $stateParams.id );
 	$scope.pay_id = $stateParams.id;
@@ -716,7 +827,7 @@ angular.module('starter.controllers', [])
 	if(TSEL.indexOf(kodeSeluler) != 0){
 		// console.log("TSEL");
 		if($scope.product_id.indexOf("HSB") != -1 || $scope.product_id.indexOf("SH") != -1){
-			console.log("localStorage.Telkomsel:" + ($localStorage.Telkomsel) );		
+			// console.log("localStorage.Telkomsel:" + ($localStorage.Telkomsel) );		
 			angular.forEach(angular.fromJson($localStorage.Telkomsel), function(value, key) {
 				if(value.product_id==$scope.product_id){
 					// console.log(value.product_id + " = " + value.product_name);
@@ -733,7 +844,7 @@ angular.module('starter.controllers', [])
 			});
 		}
 		if($scope.product_id.indexOf("HSD") != -1){
-			console.log("localStorage.TSELD:" + angular.fromJson($localStorage.TSELD) );		
+			// console.log("localStorage.TSELD:" + angular.fromJson($localStorage.TSELD) );		
 			angular.forEach(angular.fromJson($localStorage.TSELD), function(value, key) {
 				if(value.product_id==$scope.product_id){
 					// console.log(value.product_id + " = " + value.product_name);
@@ -863,6 +974,39 @@ angular.module('starter.controllers', [])
 
 	// }, false);
 	
+})
+
+.controller('PlntokenCtrl', function($scope, $stateParams, $http, $ionicLoading, $ionicPopup, $localStorage) {
+	console.log( "PlntokenCtrl: " + $stateParams );
+
+	$ionicLoading.show({
+		template: '<ion-spinner></ion-spinner>',
+		duration: 3000
+	}).then(function(){
+		
+		if($localStorage.Plntoken !== undefined) {
+			$scope.itemOperator = angular.fromJson($localStorage.Plntoken);
+		} else {
+			$http.get("http://vaganzatravel.com/pulsa/pembelian.php?product_id=PLNPRA", { cache: false }).then(function(reply) {
+				// console.info("itemOperator: "+JSON.stringify(reply));
+				// window.localStorage["TSEL"] = angular.toJson(reply.data.data);
+				$localStorage.Plntoken = angular.toJson(reply.data.data);
+				$scope.itemOperator = angular.fromJson($localStorage.Plntoken);
+				
+			},function (error) {
+				return alertPopup = $ionicPopup.alert({
+					title: 'Load data failed!',
+					template: 'Please check your internet!'
+				});
+			});
+		}
+		$ionicLoading.hide();
+	},function (error) {
+		return alertPopup = $ionicPopup.alert({
+			// title: 'Login failed!',
+			template: 'ERROR: ' + JSON.stringify(error.status)
+		});
+	});
 })
 
 .controller('PayconfirmCtrl', function($scope, $stateParams) {
