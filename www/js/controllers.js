@@ -912,7 +912,7 @@ angular.module('starter.controllers', [])
 
 })
 
-.controller('HistoryCtrl', function($scope, $stateParams, $http, $localStorage, $ionicPopup, $cordovaToast, $timeout, featuresData) {
+.controller('HistoryCtrl', function($scope, $stateParams, $http, $localStorage, $ionicPopup, $ionicLoading, $timeout, featuresData) {
 	// document.addEventListener("deviceready", function () {
 		$scope.history = [];
 
@@ -945,11 +945,17 @@ angular.module('starter.controllers', [])
 				// var url = "http://vaganzatravel.com/pulsa/history.php";
 				// var trustedUrl = $sce.trustAsResourceUrl(url);
 				// $http.get(url, { cache: true }).then(function(resp) {
+
+				$ionicLoading.show({
+					template: '<ion-spinner icon="spiral"></ion-spinner>',
+				});
+
 				featuresData.GetHistory().then(function(resp) {
-					console.log(resp.data);					
+					// console.log(resp.data);					
 					$localStorage.History = angular.toJson(resp.data);
 					$scope.history = angular.fromJson($localStorage.History);
 					
+					$ionicLoading.hide();
 				},function (error) {
 					return alertPopup = $ionicPopup.alert({
 						title: 'Load data failed!',

@@ -9,6 +9,7 @@
     "gulp-sass": "^3.1.0"
   },
   "dependencies": {
+    "@ionic/v1-toolkit": "^1.0.0",
     "cordova-android": "7.0.0",
     "cordova-plugin-actionsheet": "git+https://github.com/EddyVerbruggen/cordova-plugin-actionsheet.git",
     "cordova-plugin-device": "^2.0.2",
