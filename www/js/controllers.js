@@ -723,6 +723,7 @@ angular.module('starter.controllers', [])
 			// console.info($scope.detailTrx);
 		}
 	});
+	console.info($scope.detailTrx);
 
 	$scope.bayarPulsa = function(){
 		console.info($scope.detailTrx);
@@ -795,11 +796,14 @@ angular.module('starter.controllers', [])
 	
 	$scope.product_id = $stateParams.product_id;
 	$scope.target = $stateParams.target;
-	console.log($stateParams);
+	// console.log($stateParams);
 	
 	var kodeSeluler = $scope.target.substring(0, 4);
 	var kodeUnik = $scope.target.substr(-3);
-	console.log(kodeUnik);
+	if(kodeUnik==0){
+		kodeUnik = Math.floor(Math.random()*(999-100+1)+100);
+	}
+	console.log("kodeUnik:" + kodeUnik);
 	$scope.saldo = 0;
 	$scope.loadSaldo = function(){
 		
@@ -824,6 +828,29 @@ angular.module('starter.controllers', [])
 	// console.log("localStorage.Saldo:" + angular.fromJson($localStorage.Saldo) );
 
 	$scope.detailTrx = [];
+
+	// Token
+	if($scope.product_id.indexOf("PLP") != -1){
+
+		angular.forEach(angular.fromJson($localStorage.Plntoken), function(value, key) {
+			if(value.product_id==$stateParams.product_id){
+				// console.log(value.product_id + " = " + value.product_name);
+				$scope.detailTrx.push({
+					product_id: value.product_id,
+					product_name: value.product_name,
+					ket: value.ket,
+					price: value.price,
+					status: value.status,
+					kode: kodeUnik,
+					totprice: parseInt(value.price) + parseInt(kodeUnik),
+				});
+				// console.info($scope.detailTrx);
+			}
+		});
+		console.info($scope.detailTrx);
+	}
+
+	// Pulsa & Paket data
 	if(TSEL.indexOf(kodeSeluler) != 0){
 		// console.log("TSEL");
 		if($scope.product_id.indexOf("HSB") != -1 || $scope.product_id.indexOf("SH") != -1){
@@ -835,7 +862,8 @@ angular.module('starter.controllers', [])
 						product_id: value.product_id,
 						product_name: value.product_name,
 						ket: value.ket,
-						price: parseInt(value.price) + parseInt(kodeUnik),
+						price: value.price,
+						totprice: parseInt(value.price) + parseInt(kodeUnik),
 						status: value.status,
 						kode: kodeUnik
 					});
@@ -852,7 +880,8 @@ angular.module('starter.controllers', [])
 						product_id: value.product_id,
 						product_name: value.product_name,
 						ket: value.ket,
-						price: parseInt(value.price) + parseInt(kodeUnik),
+						price: value.price,
+						totprice: parseInt(value.price) + parseInt(kodeUnik),
 						status: value.status,
 						kode: kodeUnik
 					});
@@ -882,31 +911,24 @@ angular.module('starter.controllers', [])
 		// $http.dataTrx(url, dataTrx).then(function(resp) {
 		$ionicLoading.show({
 			template: '<ion-spinner></ion-spinner>',
-			duration: 3000
-		}).then(function(){
+			// duration: 3000
+		});
 			featuresData.GetTransaksi(dataTrx).then(function(resp) {
-				console.log(resp);
+				console.log(resp); $ionicLoading.hide();
+
 				if(resp.data.status=="error"){
 					return alertPopup = $ionicPopup.alert({
 						title: 'Transaksi Gagal!',
 						template: resp.data.message
 					});
 				}
-				// $localStorage.Saldo = angular.toJson(data.data.balance);
-				// $scope.saldo = angular.fromJson($localStorage.Saldo);
-			},function (error) {
+			},function (error) {				
+				$ionicLoading.hide();
 				return alertPopup = $ionicPopup.alert({
 					title: 'Load data failed!',
 					template: 'Please check your internet!'
 				});
 			});
-			$ionicLoading.hide();
-		},function (error) {
-			return alertPopup = $ionicPopup.alert({
-			// title: 'Login failed!',
-				template: 'ERROR: ' + JSON.stringify(error.status)
-			});
-		});
 
 	}
 
@@ -957,6 +979,8 @@ angular.module('starter.controllers', [])
 					
 					$ionicLoading.hide();
 				},function (error) {
+					$ionicLoading.hide();
+					
 					return alertPopup = $ionicPopup.alert({
 						title: 'Load data failed!',
 						template: 'Please check your internet!'

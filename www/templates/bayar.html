@@ -5,7 +5,7 @@
 		<div class="item item-avatar">
 			<img src="img/train_64.png">
 			<h2><b>{{detailTrx[0].price | currency:"Rp. ":0}}</b></h2>
-			<p>{{detailTrx[0].product_name}} <br> {{target}}</p>
+			<p>{{detailTrx[0].product_name}} <span ng-show="!target"><br> {{target}}</span></p>
 		</div>
 		<div ng-show="!detailTrx[0].ket" class="item item-divider">{{detailTrx[0].ket}}</div>
 	</div>
@@ -28,7 +28,7 @@
 		<ul class="list">
 			<li class="item">Harga Produk <span style="float:right;">{{detailTrx[0].price | currency:"Rp. ":0}}</span></li>
 			<li class="item">Kode Unik <span style="float:right;">{{detailTrx[0].kode}}</span></li>
-			<li class="item">Jumlah Transfer <span style="float:right;">{{detailTrx[0].price | currency:"Rp. ":0}}</span></li>
+			<li class="item">Jumlah Transfer <span style="float:right;">{{detailTrx[0].totprice | currency:"Rp. ":0}}</span></li>
 			<li class="item" style="padding-top:0px;padding-bottom:0px;">
 				<button class="button button-block button-balanced" ng-click="bayarPulsa()">Konfirmasi</button>
 			</li>
