@@ -13,7 +13,7 @@
 
 	<!-- <p>Use any touch gesture on this page</p> 
     <p>Used touch gesture: {{gesture.used}}</p> -->
-	<div class="card" id="saldo" style="margin:10px 0px;">
+	<div class="card" id="saldo" style="margin:0px;">
 		<div class="item item-avatar">
 			<img src="img/money_64.png" style="vertical-align:middle">
 			<h2 style="font-size:24px"> Saldo {{saldo | currency:"Rp. ":0}}</h2>
@@ -42,7 +42,7 @@
 	  	<div class="col col-33" ng-repeat="item in itemProduk | limitTo:3">
 			<a class="subdued" href="#/app/{{item.product_id | lowercase}}">
 				<img src="img/{{item.image}}">
-				<p class="card-title">{{item.product_name}}</p>
+				<p class="card-title">{{$index}} {{item.product_name}}</p>
 			</a>
 		</div>
 	</div>
