@@ -181,7 +181,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngStorage', 'ngCordo
       })
 
 
-  .state('tabs.kes', {
+  .state('app.kes', {
     url: "/kes",
     views: {
       'tab-kes': {
