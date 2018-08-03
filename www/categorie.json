@@ -20,42 +20,6 @@
       "status": "1"
     },
     {
-      "product_id": "GAME",
-      "product_name": "Voucher Game",
-      "image": "voucher-game.png",
-      "status": "1"
-    },
-    {
-      "product_id": "OJEKONLINE",
-      "product_name": "OJEK Online",
-      "image": "ionic.png",
-      "status": "1"
-    },
-    {
-      "product_id": "EMONEY",
-      "product_name": "E-Money",
-      "image": "ionic.png",
-      "status": "1"
-    },
-    {
-      "product_id": "WIFIID",
-      "product_name": "WIFI ID",
-      "image": "smartphone_64.png",
-      "status": "1"
-    },
-    {
-      "product_id": "TRFBANK",
-      "product_name": "Transfer Bank",
-      "image": "atm_64.png",
-      "status": "1"
-    },
-    {
-      "product_id": "TLPSMS",
-      "product_name": "Telepon & SMS",
-      "image": "smartphone_64.png",
-      "status": "1"
-    },
-    {
       "product_id": "PLN",
       "product_name": "Tagihan PLN",
       "image": "power_64.png",
@@ -77,38 +41,74 @@
       "updated_at": "2018-06-09 19:30:04"
     },
     {
-      "product_id": "MULTIFINANCE",
-      "product_name": "Multifinance",
-      "image": "smartphone_64.png",
-      "status": "1",
-      "updated_at": "2018-06-09 19:30:29"
-    },
-    {
       "product_id": "TELKOM",
-      "product_name": "Tagihan Telkom",
+      "product_name": "Telkom",
       "image": "smartphone_64.png",
       "status": "1",
       "updated_at": "2018-06-09 19:30:37"
     },
     {
       "product_id": "TELEPON",
-      "product_name": "Tagihan Telepon",
+      "product_name": "Bayar Telepon",
       "image": "smartphone_64.png",
       "status": "1",
       "updated_at": "2018-06-09 19:30:41"
     },
     {
+      "product_id": "GAME",
+      "product_name": "Voucher Game",
+      "image": "voucher-game.png",
+      "status": "0"
+    },
+    {
+      "product_id": "OJEKONLINE",
+      "product_name": "OJEK Online",
+      "image": "ionic.png",
+      "status": "0"
+    },
+    {
+      "product_id": "EMONEY",
+      "product_name": "E-Money",
+      "image": "ionic.png",
+      "status": "0"
+    },
+    {
+      "product_id": "WIFIID",
+      "product_name": "WIFI ID",
+      "image": "smartphone_64.png",
+      "status": "0"
+    },
+    {
+      "product_id": "TRFBANK",
+      "product_name": "Transfer Bank",
+      "image": "atm_64.png",
+      "status": "0"
+    },
+    {
+      "product_id": "TLPSMS",
+      "product_name": "Telepon & SMS",
+      "image": "smartphone_64.png",
+      "status": "0"
+    },
+    {
+      "product_id": "MULTIFINANCE",
+      "product_name": "Multifinance",
+      "image": "smartphone_64.png",
+      "status": "0",
+      "updated_at": "2018-06-09 19:30:29"
+    },
+    {
       "product_id": "TV",
       "product_name": "TV Berbayar",
       "image": "smartphone_64.png",
-      "status": "1",
+      "status": "0",
       "updated_at": "2018-06-09 19:30:46"
     },
     {
       "product_id": "PGN",
       "product_name": "Gas Negara (PGN)",
       "image": "smartphone_64.png",
-      "status": "1",
+      "status": "0",
       "updated_at": "2018-06-30 17:49:33"
     },
     {

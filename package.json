@@ -13,6 +13,7 @@
     "cordova-android": "7.0.0",
     "cordova-plugin-actionsheet": "git+https://github.com/EddyVerbruggen/cordova-plugin-actionsheet.git",
     "cordova-plugin-device": "^2.0.2",
+    "cordova-plugin-exitapp": "^1.0.0",
     "cordova-plugin-ionic-keyboard": "^2.0.5",
     "cordova-plugin-ionic-webview": "^1.1.19",
     "cordova-plugin-splashscreen": "^5.0.2",
@@ -27,7 +28,8 @@
       "cordova-plugin-ionic-webview": {},
       "cordova-plugin-ionic-keyboard": {},
       "cordova-plugin-x-toast": {},
-      "cordova-plugin-actionsheet": {}
+      "cordova-plugin-actionsheet": {},
+      "cordova.custom.plugins.exitapp": {}
     },
     "platforms": [
       "android"

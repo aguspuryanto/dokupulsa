@@ -9,6 +9,20 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngStorage', 'ngCordo
 .run(function($ionicPlatform,$state,$ionicHistory,$ionicPopup,$rootScope,$timeout) {
 
 	$ionicPlatform.ready(function() {
+    console.log('platform ready');
+
+    var history = $ionicHistory.viewHistory();
+    angular.forEach(history.views, function(view, index){
+      console.log('views: ' + view.stateName);
+    });
+
+    var currentState = $ionicHistory.currentStateName();
+    if (currentState.stateName == 'app.home') {
+      console.log('About to exit the app');
+      // ionic.Platform.exitApp();     
+      // navigator.app.exitApp(); // none works 
+    }
+
 		// Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
 		// for form inputs)
 		// if (window.cordova && window.cordova.plugins.Keyboard) {
@@ -40,63 +54,67 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngStorage', 'ngCordo
     }
     
     // Disable BACK button on home
-    $ionicPlatform.registerBackButtonAction(function(event) {
-      if (true) { // your check here
-        $ionicPopup.confirm({
-          title: 'System warning',
-          template: 'are you sure you want to exit?'
-        }).then(function(res) {
-          if (res) {
-            ionic.Platform.exitApp();
-          }
-        })
+    // For exit on back button press
+    $ionicPlatform.registerBackButtonAction(function(e) {
+        if ($rootScope.backButtonPressedOnceToExit) {
+          navigator.app.exitApp(); // or // ionic.Platform.exitApp(); both work
+        } else if ($ionicHistory.backView()) {
+            $ionicHistory.goBack();
+        } else {
+          $rootScope.backButtonPressedOnceToExit = true;
+          // "Press back button again to exit" : show toast                
+          setTimeout(function() {
+              $rootScope.backButtonPressedOnceToExit = false;
+          }, 2000); // reset if user doesn't press back within 2 seconds, to fire exit
       }
-    }, 100);
-	
-		$ionicPlatform.registerBackButtonAction(function(e) {
       e.preventDefault();
-      function showConfirm() {
-        var confirmPopup = $ionicPopup.show({
-          title : 'Exit AppName?',
-          template : 'Are you sure you want to exit AppName?',
-          buttons : [{
-            text : 'Cancel',
-            type : 'button-royal button-outline',
-          }, {
-          text : 'Ok',
-          type : 'button-royal',
-          onTap : function() {
-            ionic.Platform.exitApp();
-          }
-          }]
-        });
-      };
-     
-      // Is there a page to go back to?
-      if ($ionicHistory.backView()) {
-        // Go back in history
-        $ionicHistory.backView().go();
-      } else {
-        // This is the last page: Show confirmation popup
-        showConfirm();
-      }
-     
       return false;
-    }, 999);
+    }, 101);
+	
+		// $ionicPlatform.registerBackButtonAction(function(e) {
+    //   e.preventDefault();
+    //   function showConfirm() {
+    //     var confirmPopup = $ionicPopup.show({
+    //       title : 'Exit AppName?',
+    //       template : 'Are you sure you want to exit AppName?',
+    //       buttons : [{
+    //         text : 'Cancel',
+    //         type : 'button-royal button-outline',
+    //       }, {
+    //       text : 'Ok',
+    //       type : 'button-royal',
+    //       onTap : function() {
+    //         ionic.Platform.exitApp();
+    //       }
+    //       }]
+    //     });
+    //   };
+     
+    //   // Is there a page to go back to?
+    //   if ($ionicHistory.backView()) {
+    //     // Go back in history
+    //     $ionicHistory.backView().go();
+    //   } else {
+    //     // This is the last page: Show confirmation popup
+    //     showConfirm();
+    //   }
+     
+    //   return false;
+    // }, 999);
 
     // To Disable Back in Entire App
-    $ionicPlatform.registerBackButtonAction(function(){
-      event.preventDefault();
-    }, 100);
+    // $ionicPlatform.registerBackButtonAction(function(){
+    //   event.preventDefault();
+    // }, 100);
 
     // To Conditionally Disable Back
-    $ionicPlatform.registerBackButtonAction(function(){
-      if($ionicHistory.currentStateName === 'app.search'){
-        event.preventDefault();
-      }else{
-        $ionicHistory.goBack();
-      }
-    }, 100);
+    // $ionicPlatform.registerBackButtonAction(function(){
+    //   if($ionicHistory.currentStateName === 'app.home'){
+    //     event.preventDefault();
+    //   }else{
+    //     $ionicHistory.goBack();
+    //   }
+    // }, 100);
     
   });
   
@@ -112,11 +130,11 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngStorage', 'ngCordo
     controller: 'AppCtrl'
   })
 
-  .state('app.search', {
-    url: '/search',
+  .state('app.home', {
+    url: '/home',
     views: {
       'menuContent': {
-        templateUrl: 'templates/search.html',
+        templateUrl: 'templates/home.html',
         controller: 'HomeCtrl'
       }
     }
@@ -151,6 +169,26 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngStorage', 'ngCordo
         }
       }
     })
+
+    .state('app.bpjs', {
+        url: '/bpjs',
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/bpjs.html',
+            controller: 'BpjsCtrl'
+          }
+        }
+      })
+
+
+  .state('tabs.kes', {
+    url: "/kes",
+    views: {
+      'tab-kes': {
+        templateUrl: "templates/kes.html"
+      }
+    }
+  })
 
   .state('app.pembelian', {
       url: '/pulsa/pembelian/:product_id/:target',
@@ -242,7 +280,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngStorage', 'ngCordo
   });
 	
 	// if none of the above states are matched, use this as the fallback
-	$urlRouterProvider.otherwise('/app/search');
+	$urlRouterProvider.otherwise('/app/home');
   
 	//Enable cross domain calls
   $httpProvider.defaults.useXDomain = true;

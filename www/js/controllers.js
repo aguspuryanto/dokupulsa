@@ -64,36 +64,36 @@ angular.module('starter.controllers', [])
 	// 	}
 	// }, 100);
 
-  $scope.options = {
-    autoplay: 2500,
-    loop: false,
-    // effect: 'fade',
-    speed: 1000,
-    slidesPerView: 1,
-    centeredSlides: true
-  }
+	$scope.options = {
+		autoplay: 2500,
+		loop: false,
+		// effect: 'fade',
+		speed: 1000,
+		slidesPerView: 1,
+		centeredSlides: true
+	}
   
-  $scope.counts = {
-    swipe : 0,
-    tap : 0,
-    doubletap : 0,
-    hold : 0
-  };
+	$scope.counts = {
+		swipe : 0,
+		tap : 0,
+		doubletap : 0,
+		hold : 0
+	};
   
-  $scope.reportTap = function(tapType){
-    // alert(tapType + " reported");
-    // alert('you tapped me!');
-    $scope.counts[tapType]++;
-  };
+	$scope.reportTap = function(tapType){
+		// alert(tapType + " reported");
+		// alert('you tapped me!');
+		$scope.counts[tapType]++;
+	};
   
-  $scope.gesture = {
-    used: ''
-  };  
+	$scope.gesture = {
+		used: ''
+	};  
 
-  $scope.onGesture = function(gesture) {
-    console.log(gesture);
-    $scope.gesture.used = gesture;
-  }
+	$scope.onGesture = function(gesture) {
+		console.log(gesture);
+		$scope.gesture.used = gesture;
+	}
 
 	/* var element = angular.element(document.querySelector('#content'));   
 		$ionicGesture.on('tap', function(e){
@@ -139,7 +139,7 @@ angular.module('starter.controllers', [])
 	}
 
 	$scope.itemProduk = [];
-	console.log("itemProduk:" + JSON.stringify(angular.fromJson($localStorage.categoriProduk)));
+	// console.log("itemProduk:" + JSON.stringify(angular.fromJson($localStorage.categoriProduk)));
 
 	// if($localStorage.categoriProduk !== undefined) {
 	// 	$scope.itemProduk = angular.fromJson($localStorage.categoriProduk);
@@ -1007,7 +1007,7 @@ angular.module('starter.controllers', [])
 })
 
 .controller('PlntokenCtrl', function($scope, $stateParams, $http, $ionicLoading, $ionicPopup, $localStorage) {
-	console.log( "PlntokenCtrl: " + $stateParams );
+	// console.log( "PlntokenCtrl: " + $stateParams );
 
 	$ionicLoading.show({
 		template: '<ion-spinner></ion-spinner>',
@@ -1030,6 +1030,52 @@ angular.module('starter.controllers', [])
 				});
 			});
 		}
+		$ionicLoading.hide();
+	},function (error) {
+		return alertPopup = $ionicPopup.alert({
+			// title: 'Login failed!',
+			template: 'ERROR: ' + JSON.stringify(error.status)
+		});
+	});
+})
+
+.controller('BpjsCtrl', function($scope, $stateParams, $http, $ionicLoading, $ionicPopup, $localStorage) {
+	// console.log( "BpjsCtrl: " + $stateParams );
+
+	$ionicLoading.show({
+		template: '<ion-spinner></ion-spinner>',
+		duration: 3000
+	}).then(function(){
+		// $localStorage.bpjs = [];
+		
+		// if($localStorage.bpjs !== undefined) {
+		// 	$scope.itemOperator = angular.fromJson($localStorage.bpjs);
+		// } else {
+			$http.get("http://vaganzatravel.com/pulsa/pembayaran.php?product_id=BPJS", { cache: false }).then(function(reply) {
+				// console.info("itemOperator: "+JSON.stringify(reply));
+				// window.localStorage["TSEL"] = angular.toJson(reply.data.data);
+				// $localStorage.bpjs = angular.toJson(reply.data.data);
+
+				// var produkBpjs = reply.data.data;
+				// produkBpjs.push({
+				// 	product_id: "BPJSTK",
+				// 	product_name: "BPJS TENAGA KERJA",
+				// 	markup_api: 0,
+				// 	fee: 0,
+				// 	status: 0
+				// });
+
+				// console.log(produkBpjs);
+				
+				// $scope.itemBpjs = angular.fromJson(reply.data.data);
+				
+			},function (error) {
+				return alertPopup = $ionicPopup.alert({
+					title: 'Load data failed!',
+					template: 'Please check your internet!'
+				});
+			});
+		// }
 		$ionicLoading.hide();
 	},function (error) {
 		return alertPopup = $ionicPopup.alert({
