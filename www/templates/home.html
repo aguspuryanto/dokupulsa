@@ -15,8 +15,13 @@
     <p>Used touch gesture: {{gesture.used}}</p> -->
 	<div class="card" id="saldo" style="margin:0px;">
 		<div class="item item-avatar">
-			<img src="img/money_64.png" style="vertical-align:middle">
-			<h2 style="font-size:24px"> Saldo {{saldo | currency:"Rp. ":0}}</h2>
+			<img src="img/money_64.png" style="vertical-align:middle">	
+			<div style="float: left;">
+				<h2 style="padding-top:10px;"> Saldo {{saldo | currency:"Rp. ":0}}</h2>
+			</div>
+			<div style="float: right;padding-top: 5px;">
+				<button class="button button-small button-positive">Topup Saldo</button>
+			</div>
 		</div>
 	</div>
 
