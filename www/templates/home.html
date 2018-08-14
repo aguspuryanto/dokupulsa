@@ -25,25 +25,7 @@
 		</div>
 	</div>
 
-    	<div class="row">
-		<!-- <div class="col col-33">	  	
-			<a class="subdued" href="#/app/pulsa">
-				<img src="img/smartphone_64.png">
-				<p class="card-title">Pulsa</p>
-			</a>
-		</div>
-		<div class="col col-33">	  	
-			<a class="subdued" href="#/app/paket">
-				<img src="img/worldwide_64.png">
-				<p class="card-title">Paket Data</p>
-			</a>
-		</div>
-		<div class="col col-33">	  	
-			<a class="subdued" href="#/app/plnpra">
-				<img src="img/electricity_64.png">
-				<p class="card-title">Token Listrik</p>
-			</a>
-		</div> -->
+    <div class="row">
 	  	<div class="col col-33" ng-repeat="item in itemProduk | filter:{ status: 1 } | limitTo:3">
 			<a class="subdued" href="#/app/{{item.product_id | lowercase}}">
 				<img src="img/{{item.image}}">
@@ -51,16 +33,18 @@
 			</a>
 		</div>
 	</div>
+
 	<div class="row">
-		<div class="col col-33" ng-repeat="item in itemProduk | filter:{ status: 1 } | limitTo:3:5">
+		<div class="col col-33" ng-repeat="item in itemProduk | filter:{ status: 1 } | limitTo:5:3">
 		    <a class="subdued" href="#/app/{{item.product_id | lowercase}}">
 			    <img src="img/{{item.image}}">
 			    <p class="card-title">{{item.product_name}}</p>
 		    </a>
 	    </div>
 	</div>
+
 	<div class="row">
-		<div class="col col-33" ng-repeat="item in itemProduk | filter:{ status: 1 } | limitTo:7:9">
+		<div class="col col-33" ng-repeat="item in itemProduk | filter:{ status: 1 } | limitTo:8:6">
 		    <a class="subdued" href="#">
 			    <img src="img/{{item.image}}">
 			    <p class="card-title">{{item.product_name}}</p>
@@ -68,7 +52,7 @@
 	    </div>
 	</div>
 	<div class="row">
-		<div class="col col-33" ng-repeat="item in itemProduk | filter:{ status: 1 } | limitTo:10:12">
+		<div class="col col-33" ng-repeat="item in itemProduk | filter:{ status: 1 } | limitTo:10:8">
 		    <a class="subdued" href="#">
 			    <img src="img/smartphone_64.png">
 			    <p class="card-title">{{item.product_name}}</p>
@@ -76,7 +60,7 @@
 	    </div>
 	</div>
 	<div class="row">
-		<div class="col col-33" ng-repeat="item in itemProduk | filter:{ status: 1 } | limitTo:13:14">
+		<div class="col col-33" ng-repeat="item in itemProduk | filter:{ status: 1 } | limitTo:12:10">
 		    <a class="subdued" href="#">
 			    <img src="img/smartphone_64.png">
 			    <p class="card-title">{{item.product_name}}</p>

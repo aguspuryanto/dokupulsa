@@ -52,7 +52,7 @@ angular.module('starter.controllers', [])
   ];
 })
 
-.controller('HomeCtrl', function($scope, $stateParams, $http, $ionicLoading, $ionicPopup, $localStorage, $ionicGesture, $ionicPlatform, $location, $ionicHistory) {
+.controller('HomeCtrl', function($scope, $stateParams, $http, $ionicLoading, $ionicPopup, $localStorage, $ionicGesture, $ionicPlatform, $location, $ionicHistory, $interval) {
 
 	// $ionicPlatform.registerBackButtonAction(function() {
 	// 	if ($location.path() === "/search") {
@@ -112,13 +112,15 @@ angular.module('starter.controllers', [])
 	}, ceksaldo);
 	
 	$scope.saldo = 0;
-	$scope.loadSaldo = function(){		
+	$scope.loadSaldo = function(){
 		if($localStorage.Saldo !== undefined) {
+			// console.log( $localStorage.Saldo );
 			$scope.saldo = angular.fromJson($localStorage.Saldo);
 		} else {
 			var url = "http://vaganzatravel.com/pulsa/ceksaldo.php";
 			// var trustedUrl = $sce.trustAsResourceUrl(url);
-			$http.get(url, { cache: true }).then(function(data) {
+			$http.get(url, { cache: true }).then(function(data) { 
+				console.log( data );
 				$localStorage.Saldo = angular.toJson(data.data.balance);
 				$scope.saldo = angular.fromJson($localStorage.Saldo);
 				
@@ -131,6 +133,8 @@ angular.module('starter.controllers', [])
 		}
 	}	
 	$scope.loadSaldo();
+
+	$interval($scope.loadSaldo(), 1000 * 60 * 60);
 
 	$scope.getFiltered= function(obj, idx){
 		//Set a property on the item being repeated with its actual index
@@ -145,7 +149,12 @@ angular.module('starter.controllers', [])
 	// 	$scope.itemProduk = angular.fromJson($localStorage.categoriProduk);
 		
 	// } else {
-		$http.get("/categorie.json", { cache: false }).then(function(reply) {
+		var url = "";
+		if(ionic.Platform.isAndroid()){
+			url = "/android_asset/www/";
+		}
+		
+		$http.get(url + "categorie.json", { cache: false }).then(function(reply) {
 			// console.info("itemOperator: "+JSON.stringify(reply));
 			$localStorage.categoriProduk = angular.toJson(reply.data.data);
 			$scope.itemProduk = angular.fromJson($localStorage.categoriProduk);
@@ -1004,6 +1013,23 @@ angular.module('starter.controllers', [])
 
 	// }, false);
 	
+})
+
+.controller('cekTagihanPlnCtrl', function($scope, $stateParams, $http, $ionicLoading, $ionicPopup, $localStorage){
+	console.log( "cekTagihanPlnCtrl: " + $stateParams );
+
+	$scope.nopel = "";
+
+	$scope.cekTagihanPln = function(nopel){
+		$ionicLoading.show({
+			template: '<ion-spinner></ion-spinner>',
+			duration: 3000
+		}).then(function(){
+			console.log ("No Pelanggan: " + nopel);
+			$ionicLoading.hide();
+		});
+	};
+	// showTagihanPln
 })
 
 .controller('PlntokenCtrl', function($scope, $stateParams, $http, $ionicLoading, $ionicPopup, $localStorage) {

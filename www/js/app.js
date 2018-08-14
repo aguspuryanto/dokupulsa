@@ -170,6 +170,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngStorage', 'ngCordo
       }
     })
 
+    .state('app.pln', {
+        url: '/pln',
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/cekpln.html',
+            controller: 'cekTagihanPlnCtrl'
+          }
+        }
+      })
+
     .state('app.bpjs', {
         url: '/bpjs',
         views: {
