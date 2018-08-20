@@ -1,6 +1,6 @@
 angular.module('starter.controllers', [])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout) {
+.controller('AppCtrl', function($scope, $ionicModal, $ionicPlatform, $timeout) {
 
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
@@ -8,6 +8,10 @@ angular.module('starter.controllers', [])
   // listen for the $ionicView.enter event:
   //$scope.$on('$ionicView.enter', function(e) {
   //});
+
+  $ionicPlatform.ready(function() {
+	console.log( "platform: " + ionic.Platform.platform() );
+  });
 
   // Form data for the login modal
   $scope.loginData = {};
@@ -106,15 +110,19 @@ angular.module('starter.controllers', [])
 	var ceksaldo = angular.element(document.querySelector('#saldo'));   
 	$ionicGesture.on('doubletap', function(e){
 		$scope.$apply(function() {
-			console.log('doubletap');
+			// console.log('doubletap');
+			// reset
+			$localStorage.Saldo = undefined;
 			$scope.loadSaldo();
 		})    
 	}, ceksaldo);
 	
 	$scope.saldo = 0;
+	$localStorage.Saldo = undefined;
+
 	$scope.loadSaldo = function(){
+		console.log( "localStorage.Saldo :" + $localStorage.Saldo );
 		if($localStorage.Saldo !== undefined) {
-			// console.log( $localStorage.Saldo );
 			$scope.saldo = angular.fromJson($localStorage.Saldo);
 		} else {
 			var url = "http://vaganzatravel.com/pulsa/ceksaldo.php";
@@ -152,6 +160,10 @@ angular.module('starter.controllers', [])
 		var url = "";
 		if(ionic.Platform.isAndroid()){
 			url = "/android_asset/www/";
+		}
+
+		if(window.location.hostname === "localhost"){
+			url = "/";
 		}
 		
 		$http.get(url + "categorie.json", { cache: false }).then(function(reply) {
@@ -556,14 +568,18 @@ angular.module('starter.controllers', [])
 		}).then(function(){
 			featuresData.GetTransaksi(dataTrx).then(function(resp) {
 				console.log(resp);
-				if(resp.data.status=="error"){
+				if(resp.data.status=="success"){
+					return alertPopup = $ionicPopup.alert({
+						title: 'Transaksi Sukses!',
+						template: resp.data.message
+					});
+				} else {
 					return alertPopup = $ionicPopup.alert({
 						title: 'Transaksi Gagal!',
 						template: resp.data.message
 					});
 				}
-				// $localStorage.Saldo = angular.toJson(data.data.balance);
-				// $scope.saldo = angular.fromJson($localStorage.Saldo);
+				// $ionicLoading.hide();
 			},function (error) {
 				return alertPopup = $ionicPopup.alert({
 					title: 'Load data failed!',
@@ -663,14 +679,18 @@ angular.module('starter.controllers', [])
 		}).then(function(){
 			featuresData.GetTransaksi(dataTrx).then(function(resp) {
 				console.log(resp);
-				if(resp.data.status=="error"){
+				if(resp.data.status=="success"){
+					return alertPopup = $ionicPopup.alert({
+						title: 'Transaksi Sukses!',
+						template: resp.data.message
+					});
+				} else {
 					return alertPopup = $ionicPopup.alert({
 						title: 'Transaksi Gagal!',
 						template: resp.data.message
 					});
 				}
-				// $localStorage.Saldo = angular.toJson(data.data.balance);
-				// $scope.saldo = angular.fromJson($localStorage.Saldo);
+				// $ionicLoading.hide();
 			},function (error) {
 				return alertPopup = $ionicPopup.alert({
 					title: 'Load data failed!',
@@ -751,14 +771,18 @@ angular.module('starter.controllers', [])
 		}).then(function(){
 			featuresData.GetTransaksi(dataTrx).then(function(resp) {
 				console.log(resp);
-				if(resp.data.status=="error"){
+				if(resp.data.status=="success"){
+					return alertPopup = $ionicPopup.alert({
+						title: 'Transaksi Sukses!',
+						template: resp.data.message
+					});
+				} else {
 					return alertPopup = $ionicPopup.alert({
 						title: 'Transaksi Gagal!',
 						template: resp.data.message
 					});
 				}
-				// $localStorage.Saldo = angular.toJson(data.data.balance);
-				// $scope.saldo = angular.fromJson($localStorage.Saldo);
+				// $ionicLoading.hide();
 			},function (error) {
 				return alertPopup = $ionicPopup.alert({
 					title: 'Load data failed!',
@@ -776,7 +800,7 @@ angular.module('starter.controllers', [])
 })
 
 .controller('PaymentCtrl', function($scope, $stateParams, $http, $localStorage, $ionicLoading, $ionicPopup, featuresData) {
-	// console.info( $stateParams.id );
+	console.info( $stateParams );
 	$scope.pay_id = $stateParams.id;
 
 	if($stateParams.id==0){
@@ -812,7 +836,7 @@ angular.module('starter.controllers', [])
 	if(kodeUnik==0){
 		kodeUnik = Math.floor(Math.random()*(999-100+1)+100);
 	}
-	console.log("kodeUnik:" + kodeUnik);
+	// console.log("kodeUnik:" + kodeUnik);
 	$scope.saldo = 0;
 	$scope.loadSaldo = function(){
 		
@@ -862,8 +886,9 @@ angular.module('starter.controllers', [])
 	// Pulsa & Paket data
 	if(TSEL.indexOf(kodeSeluler) != 0){
 		// console.log("TSEL");
+		// Pulsa
 		if($scope.product_id.indexOf("HSB") != -1 || $scope.product_id.indexOf("SH") != -1){
-			// console.log("localStorage.Telkomsel:" + ($localStorage.Telkomsel) );		
+			console.log("localStorage.Telkomsel:" + ($localStorage.Telkomsel) );		
 			angular.forEach(angular.fromJson($localStorage.Telkomsel), function(value, key) {
 				if(value.product_id==$scope.product_id){
 					// console.log(value.product_id + " = " + value.product_name);
@@ -880,8 +905,10 @@ angular.module('starter.controllers', [])
 				}
 			});
 		}
-		if($scope.product_id.indexOf("HSD") != -1){
-			// console.log("localStorage.TSELD:" + angular.fromJson($localStorage.TSELD) );		
+
+		// Paket Data
+		if($scope.product_id.indexOf("HSD") != -1 || $scope.product_id.indexOf("SD") != -1){
+			console.log("localStorage.TSELD:" + ($localStorage.TSELD) );		
 			angular.forEach(angular.fromJson($localStorage.TSELD), function(value, key) {
 				if(value.product_id==$scope.product_id){
 					// console.log(value.product_id + " = " + value.product_name);
@@ -918,19 +945,26 @@ angular.module('starter.controllers', [])
 		}
 		console.log( dataTrx );
 		// $http.dataTrx(url, dataTrx).then(function(resp) {
+			
 		$ionicLoading.show({
-			template: '<ion-spinner></ion-spinner>',
-			// duration: 3000
-		});
+				template: '<ion-spinner icon="spiral"></ion-spinner>',
+			});
+
 			featuresData.GetTransaksi(dataTrx).then(function(resp) {
 				console.log(resp); $ionicLoading.hide();
 
-				if(resp.data.status=="error"){
+				if(resp.data.status=="success"){
+					return alertPopup = $ionicPopup.alert({
+						title: 'Transaksi Sukses!',
+						template: resp.data.message
+					});
+				} else {
 					return alertPopup = $ionicPopup.alert({
 						title: 'Transaksi Gagal!',
 						template: resp.data.message
 					});
 				}
+
 			},function (error) {				
 				$ionicLoading.hide();
 				return alertPopup = $ionicPopup.alert({
@@ -950,7 +984,7 @@ angular.module('starter.controllers', [])
 		$scope.doRefresh = function() {
 			console.log('reload');
 			$timeout( function() {
-				$localStorage.History = [];				
+				$localStorage.History = undefined;				
 				$scope.loadHistory();
 				// $scope.history = angular.fromJson($localStorage.History);
 				console.log( $scope.history );
@@ -1016,17 +1050,42 @@ angular.module('starter.controllers', [])
 })
 
 .controller('cekTagihanPlnCtrl', function($scope, $stateParams, $http, $ionicLoading, $ionicPopup, $localStorage){
-	console.log( "cekTagihanPlnCtrl: " + $stateParams );
+	console.log( "cekTagihanPlnCtrl: " );
 
-	$scope.nopel = "";
+	// $scope.nopel = "";
+	$scope.cekTagihanPln = function(noPel){
+		// console.log ("No Pelanggan: " + noPel.toString() );
+		var nopelangggan = noPel.toString();
 
-	$scope.cekTagihanPln = function(nopel){
 		$ionicLoading.show({
 			template: '<ion-spinner></ion-spinner>',
-			duration: 3000
+			// duration: 3000
 		}).then(function(){
-			console.log ("No Pelanggan: " + nopel);
-			$ionicLoading.hide();
+			console.log ("No Pelanggan: " + noPel.toString() );
+
+			$http.get("http://vaganzatravel.com/pulsa/cektagihan.php?product_id=PLN&nopel=" + nopelangggan, { cache: false }).then(function(resp) {
+				console.info("itemOperator: "+JSON.stringify(resp)); 
+				$ionicLoading.hide();
+
+				if(resp.data.status=="success"){
+					return alertPopup = $ionicPopup.alert({
+						title: 'Transaksi Sukses!',
+						template: resp.data.message
+					});
+				} else {
+					return alertPopup = $ionicPopup.alert({
+						title: 'Transaksi Gagal!',
+						template: resp.data.message
+					});
+				}
+							
+			},function (error) {
+				return alertPopup = $ionicPopup.alert({
+					title: 'Load data failed!',
+					template: 'Please check your internet!'
+				});
+			});
+			// $ionicLoading.hide();
 		});
 	};
 	// showTagihanPln
