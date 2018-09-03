@@ -6,10 +6,32 @@
         <ion-tab title="BPJS Kesehatan" icon-off="ion-ios-pulse" icon-on="ion-ios-pulse-strong">
             <ion-pane>
                 <ion-content class="padding">
-                    <h4>BPJS KESEHATAN</h4>
-                    <ul class="list">
-                        <li class="item" style="padding: 0em 0.6em"><input type="number" placeholder="56604383242" ng-model="idpel"></li>
-                    </ul>
+                    <h4>BPJS KESEHATAN (0002155118916)</h4>
+                    <form name="authorizationForm" novalidate="" ng-submit="cekBpjs(idbpjs)">
+                        <ul class="list">
+                            <li class="item" style="padding: 0em 0.6em"><input type="text" placeholder="0002155118916" ng-model="idbpjs" pattern="[0-9]*"></li>
+                        </ul>
+
+                        <button type="submit" class="button button-full button-balanced">Cek Tagihan BPJS</button>
+                    </form>
+
+                    <div ng-show="newtagihanbpjs" class="row" >
+                        <table width="100%">
+                            <tbody ng-repeat="i in newtagihanbpjs">
+                            <tr>
+                                <td>{{i.key}} </td>
+                                <td>: </td>
+                                <td> {{i.value}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <style type="text/css">
+                        td { border: solid 1px #ccc; padding: 3px; }
+                    </style>
+
+                    
                 </ion-content>
             </ion-pane>
         </ion-tab>

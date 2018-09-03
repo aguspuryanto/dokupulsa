@@ -9,11 +9,11 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngStorage', 'ngCordo
 .run(function($ionicPlatform,$state,$ionicHistory,$ionicPopup,$rootScope,$timeout) {
 
 	$ionicPlatform.ready(function() {
-    console.log('platform ready');
+    console.log('platform ready: ' + ionic.Platform.platform());
 
     var history = $ionicHistory.viewHistory();
     angular.forEach(history.views, function(view, index){
-      console.log('views: ' + view.stateName);
+      // console.log('views: ' + view.stateName);
     });
 
     var currentState = $ionicHistory.currentStateName();

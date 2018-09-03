@@ -10,7 +10,7 @@ angular.module('starter.controllers', [])
   //});
 
   $ionicPlatform.ready(function() {
-	console.log( "platform: " + ionic.Platform.platform() );
+	// console.log( "platform: " + ionic.Platform.platform() );
   });
 
   // Form data for the login modal
@@ -1061,34 +1061,180 @@ angular.module('starter.controllers', [])
 			template: '<ion-spinner></ion-spinner>',
 			// duration: 3000
 		}).then(function(){
-			console.log ("No Pelanggan: " + noPel.toString() );
+			// console.log ("No Pelanggan: " + noPel.toString() );
 
-			$http.get("http://vaganzatravel.com/pulsa/cektagihan.php?product_id=PLN&nopel=" + nopelangggan, { cache: false }).then(function(resp) {
-				console.info("itemOperator: "+JSON.stringify(resp)); 
+			if($localStorage.TagihanPln !== undefined && nopelangggan.length==12) {
 				$ionicLoading.hide();
+				$scope.tagihanpln = angular.fromJson($localStorage.TagihanPln);
+			} else {
 
-				if(resp.data.status=="success"){
+				$http.get("http://vaganzatravel.com/pulsa/cektagihan.php?product_id=PLN&nopel=" + nopelangggan, { cache: false }).then(function(resp) {
+					// console.info("itemOperator: "+JSON.stringify(resp)); 
+					$ionicLoading.hide();
+
+					if(resp.data.status=="success"){
+						/*return alertPopup = $ionicPopup.alert({
+							title: 'Transaksi Sukses!',
+							template: JSON.stringify( resp.data )
+						});*/
+						
+						// console.log(resp.data);					
+						$localStorage.TagihanPln = angular.toJson(resp.data);
+						$scope.tagihanpln = angular.fromJson($localStorage.TagihanPln);
+
+					} else {
+						return alertPopup = $ionicPopup.alert({
+							title: 'Transaksi Gagal!',
+							template: resp.data.message
+						});
+					}
+								
+				},function (error) {
 					return alertPopup = $ionicPopup.alert({
-						title: 'Transaksi Sukses!',
-						template: resp.data.message
+						title: 'Load data failed!',
+						template: 'Please check your internet!'
 					});
-				} else {
-					return alertPopup = $ionicPopup.alert({
-						title: 'Transaksi Gagal!',
-						template: resp.data.message
-					});
-				}
-							
-			},function (error) {
-				return alertPopup = $ionicPopup.alert({
-					title: 'Load data failed!',
-					template: 'Please check your internet!'
 				});
-			});
-			// $ionicLoading.hide();
+				// $ionicLoading.hide();
+			}
+
+			var dataSplit = $scope.tagihanpln.data.detail.split(' | ');
+			console.log( dataSplit );
+
+			$scope.newtagihanpln = [];
+
+			angular.forEach(dataSplit, function(value, key) {
+				// console.log("key:" + key + "; value: " + value);
+
+				/*key:0; value: PLN
+				key:1; value: Nama :
+				key:2; value: ARIEF ROKHMAN
+				key:3; value: Id Pelanggan :
+				key:4; value: 511607126985
+				key:5; value: Tagihan Rp :
+				key:6; value: 83929
+				key:7; value: ADM Rp :
+				key:8; value: 2500
+				key:9; value: Total :
+				key:10; value: 86429
+				key:11; value: Nomor Invoice :
+				key:12; value: INV180903368353
+				key:13; value: Tarif/Daya :
+				key:14; value:  R1/1300 VA
+				key:15; value: BL/TH :
+				key:16; value: SEP18
+				key:17; value: Stand Meter :
+				key:18; value: 00009384-00009384
+				key:19; value: Rp Subsidi :
+				key:20; value: 0
+				key:21; value: Total Lembar Tagihan : 1 Bulan
+				key:22; value: SEP18#83929#2500
+				key:23; value:  
+				key:24; value: */
+
+				// if(key>0) this.push( {key: value} );
+
+			}, $scope.newtagihanpln);
+
+			$scope.newtagihanpln.push( {key:'Nama', value: dataSplit[2]} );
+			$scope.newtagihanpln.push( {key:'Id Pelanggan', value: dataSplit[4]} );
+			$scope.newtagihanpln.push( {key:'Tagihan', value: dataSplit[6]} );
+			$scope.newtagihanpln.push( {key:'Adm.', value: dataSplit[8]} );
+			$scope.newtagihanpln.push( {key:'Total', value: dataSplit[10]} );
+			$scope.newtagihanpln.push( {key:'Nomor Invoice', value: dataSplit[12]} );
+			$scope.newtagihanpln.push( {key:'Tarif/Daya', value: dataSplit[14]} );
+			$scope.newtagihanpln.push( {key:'BL/TH', value: dataSplit[16]} );
+			$scope.newtagihanpln.push( {key:'Stand Meter', value: dataSplit[18]} );
+			$scope.newtagihanpln.push( {key:'Subsidi', value: dataSplit[20]} );
+			// $scope.newtagihanpln.push( {'Total Lembar Tagihan': dataSplit[16]} );
+			$scope.newtagihanpln.push( {key:'Kode Pembayaran', value: dataSplit[22]} );
+
+			console.log( $scope.newtagihanpln );
+
 		});
 	};
 	// showTagihanPln
+})
+
+.controller('BpjsCtrl', function($scope, $stateParams, $http, $ionicLoading, $ionicPopup, $localStorage) {
+	console.log( "BpjsCtrl: " );
+
+	// $scope.nopel = "";
+	$scope.cekBpjs = function(noPel){
+		console.log ("No Pelanggan: " + noPel.toString() );
+		var nopelangggan = noPel.toString();
+
+		$ionicLoading.show({
+			template: '<ion-spinner></ion-spinner>',
+			duration: 3000
+		}).then(function(){
+			// $localStorage.bpjs = [];
+			
+			if($localStorage.TagihanBpjs !== undefined) {
+				$ionicLoading.hide();
+				$scope.tagihanbpjs = angular.fromJson($localStorage.TagihanBpjs);
+			} else {
+				$http.get("http://vaganzatravel.com/pulsa/cektagihan.php?product_id=BPJSKS&nopel=" + nopelangggan, { cache: false }).then(function(resp) {
+					// console.info("itemOperator: "+JSON.stringify(resp)); 
+					$ionicLoading.hide();
+
+					if(resp.data.status=="success"){
+						/*return alertPopup = $ionicPopup.alert({
+							title: 'Transaksi Sukses!',
+							template: JSON.stringify( resp.data )
+						});*/
+						
+						console.log(resp.data);
+						$localStorage.TagihanBpjs = angular.toJson(resp.data);
+						$scope.tagihanbpjs = angular.fromJson($localStorage.TagihanBpjs);
+
+					} else {
+						return alertPopup = $ionicPopup.alert({
+							title: 'Transaksi Gagal!',
+							template: resp.data.message
+						});
+					}
+					
+				},function (error) {
+					return alertPopup = $ionicPopup.alert({
+						title: 'Load data failed!',
+						template: 'Please check your internet!'
+					});
+				});
+			}
+			// $ionicLoading.hide();
+
+			if($scope.tagihanbpjs !== undefined){
+				console.log ( $scope.tagihanbpjs );
+
+				var dataSplit = $scope.tagihanbpjs.data.detail.split(' | ');
+				console.log( dataSplit );
+
+				$scope.newtagihanbpjs = [];
+				/*angular.forEach(dataSplit, function(value, key) {
+
+				}, $scope.newtagihanbpjs);*/
+
+				$scope.newtagihanbpjs.push( {key:'Nama', value: dataSplit[2]} );
+				$scope.newtagihanbpjs.push( {key:'No Registrasi', value: dataSplit[4]} );
+				$scope.newtagihanbpjs.push( {key:'Tagihan', value: dataSplit[6]} );
+				$scope.newtagihanbpjs.push( {key:'Adm.', value: dataSplit[8]} );
+				$scope.newtagihanbpjs.push( {key:'Total', value: dataSplit[10]} );
+				$scope.newtagihanbpjs.push( {key:'Nomor Invoice', value: dataSplit[12]} );
+				$scope.newtagihanbpjs.push( {key:'Transaksi', value: dataSplit[14]} );
+				$scope.newtagihanbpjs.push( {key:'periode', value: dataSplit[15]} );
+				$scope.newtagihanbpjs.push( {key:'Jumlah Bulan', value: dataSplit[17]} );
+				$scope.newtagihanbpjs.push( {key:'Jumlah Peserta', value: dataSplit[19]} );
+				$scope.newtagihanbpjs.push( {key:'Sisa Sebelumnya', value: dataSplit[21]} );
+				// $scope.newtagihanpln.push( {'Total Lembar Tagihan': dataSplit[16]} );
+				$scope.newtagihanpln.push( {key:'Kode Pembayaran', value: dataSplit[22]} );
+
+				console.log( $scope.newtagihanpln );
+			}
+
+		});
+
+	};
 })
 
 .controller('PlntokenCtrl', function($scope, $stateParams, $http, $ionicLoading, $ionicPopup, $localStorage) {
@@ -1115,52 +1261,6 @@ angular.module('starter.controllers', [])
 				});
 			});
 		}
-		$ionicLoading.hide();
-	},function (error) {
-		return alertPopup = $ionicPopup.alert({
-			// title: 'Login failed!',
-			template: 'ERROR: ' + JSON.stringify(error.status)
-		});
-	});
-})
-
-.controller('BpjsCtrl', function($scope, $stateParams, $http, $ionicLoading, $ionicPopup, $localStorage) {
-	// console.log( "BpjsCtrl: " + $stateParams );
-
-	$ionicLoading.show({
-		template: '<ion-spinner></ion-spinner>',
-		duration: 3000
-	}).then(function(){
-		// $localStorage.bpjs = [];
-		
-		// if($localStorage.bpjs !== undefined) {
-		// 	$scope.itemOperator = angular.fromJson($localStorage.bpjs);
-		// } else {
-			$http.get("http://vaganzatravel.com/pulsa/pembayaran.php?product_id=BPJS", { cache: false }).then(function(reply) {
-				// console.info("itemOperator: "+JSON.stringify(reply));
-				// window.localStorage["TSEL"] = angular.toJson(reply.data.data);
-				// $localStorage.bpjs = angular.toJson(reply.data.data);
-
-				// var produkBpjs = reply.data.data;
-				// produkBpjs.push({
-				// 	product_id: "BPJSTK",
-				// 	product_name: "BPJS TENAGA KERJA",
-				// 	markup_api: 0,
-				// 	fee: 0,
-				// 	status: 0
-				// });
-
-				// console.log(produkBpjs);
-				
-				// $scope.itemBpjs = angular.fromJson(reply.data.data);
-				
-			},function (error) {
-				return alertPopup = $ionicPopup.alert({
-					title: 'Load data failed!',
-					template: 'Please check your internet!'
-				});
-			});
-		// }
 		$ionicLoading.hide();
 	},function (error) {
 		return alertPopup = $ionicPopup.alert({
